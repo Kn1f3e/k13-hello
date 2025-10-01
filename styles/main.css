@@ -1,0 +1,838 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.container {
+    text-align: center;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.typing-text {
+    font-size: 3rem;
+    cursor: pointer;
+    border-right: 2px solid #fff;
+    padding-right: 5px;
+    animation: blink 1s infinite;
+    transition: all 0.3s ease;
+}
+
+.typing-text:hover {
+    transform: scale(1.05);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes blink {
+    0%, 100% { border-color: transparent; }
+    50% { border-color: #fff; }
+}
+
+/* Стили для игрового меню */
+.content {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    display: block !important;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    z-index: 100;
+}
+
+.content.hidden {
+    opacity: 0;
+    pointer-events: none;
+    display: none !important;
+}
+
+.game-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.menu-item {
+    font-size: 1.5rem;
+    padding: 12px 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    min-width: 250px;
+}
+
+.menu-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.menu-item:hover {
+    transform: translateX(10px);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+    border-color: #fff;
+}
+
+.menu-item:hover::before {
+    left: 100%;
+}
+
+.menu-item:active {
+    transform: translateX(5px) scale(0.98);
+}
+
+/* Анимация появления пунктов меню */
+.menu-item {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+.menu-item:nth-child(1) { animation-delay: 0.1s; }
+.menu-item:nth-child(2) { animation-delay: 0.2s; }
+.menu-item:nth-child(3) { animation-delay: 0.3s; }
+.menu-item:nth-child(4) { animation-delay: 0.4s; }
+.menu-item:nth-child(5) { animation-delay: 0.5s; }
+
+/* Стили для экрана настроек */
+.settings-screen {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    z-index: 200;
+}
+
+.settings-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+    display: none !important;
+}
+
+.settings-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.settings-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.setting-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.setting-label {
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.language-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.language-option {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    min-width: 200px;
+}
+
+.language-option:hover {
+    transform: translateX(5px);
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.language-option.selected {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+@font-face {
+    font-family: "EmojiFont";
+    src: local("Apple Color Emoji"),
+         local("Segoe UI Emoji"),
+         local("Noto Color Emoji"),
+         local("Android Emoji"),
+         local("EmojiOne"),
+         local("Twemoji");
+    unicode-range: U+1F000-1F644, U+203C-3299;
+}
+
+.flag-icon {
+    font-family: "EmojiFont", "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Android Emoji", "EmojiSymbols", "EmojiOne Mozilla", "Twemoji Mozilla", "Noto Emoji", sans-serif;
+    font-size: 1.8rem;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 1;
+}
+
+.language-name {
+    font-size: 1.2rem;
+    flex: 1;
+}
+
+/* Стили для регулятора громкости в настройках */
+.volume-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.volume-slider-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.volume-percent {
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-width: 50px;
+    text-align: center;
+}
+
+.volume-slider {
+    width: 200px;
+    height: 8px;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    /* Убираем стандартные стили браузера */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    
+    /* Фон для заполненной и пустой части */
+    background: linear-gradient(to right, #fff 0%, #fff 50%, #444 50%, #444 100%);
+}
+
+/* Стилизация для WebKit браузеров (Chrome, Safari, Edge) */
+.volume-slider::-webkit-slider-track {
+    width: 100%;
+    height: 8px;
+    background: transparent;
+    border-radius: 4px;
+    border: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #000;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    transition: all 0.2s ease;
+    margin-top: -6px;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+/* Стилизация для Firefox */
+.volume-slider::-moz-range-track {
+    width: 100%;
+    height: 8px;
+    background: transparent;
+    border-radius: 4px;
+    border: none;
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #000;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    transition: all 0.2s ease;
+}
+
+.volume-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.volume-slider::-moz-range-progress {
+    background: #fff;
+    border-radius: 4px;
+    height: 8px;
+}
+
+.back-button {
+    margin-top: 20px;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.introduction-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    z-index: 300;
+}
+
+.introduction-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+    display: none !important;
+}
+
+.dialogue-container {
+    display: flex;
+    width: 90%;
+    max-width: 1200px;
+    height: 70vh;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.character-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    flex-shrink: 0;
+}
+
+.character-image {
+    width: 250px;
+    height: 250px;
+    border-radius: 15px;
+    border: 3px solid #fff;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.character-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.character-name {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #fff;
+}
+
+.dialogue-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #fff;
+    border-radius: 15px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.dialogue-box {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.dialogue-message {
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+.dialogue-message.character {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #fff;
+    align-self: flex-start;
+    margin-right: auto;
+}
+
+.dialogue-message.user {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid #fff;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.dialogue-message.typing {
+    border: 1px dashed #fff;
+}
+
+.typing-indicator {
+    display: inline-block;
+    animation: typingPulse 1.5s infinite;
+}
+
+@keyframes typingPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+.input-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#name-input {
+    flex: 1;
+    padding: 10px 15px;
+    background: #000;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+}
+
+#name-input:focus {
+    outline: none;
+    border-color: #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+#submit-name {
+    padding: 10px 20px;
+    background: #000;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    transition: all 0.3s ease;
+}
+
+#submit-name:hover {
+    background: #fff;
+    color: #000;
+}
+
+.choices-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.choice {
+    padding: 12px 20px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.choice:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.back-to-menu {
+    margin-top: 20px;
+}
+
+.auto-return-message {
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 10px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .dialogue-container {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .character-section {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .character-image {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .dialogue-message {
+        max-width: 95%;
+    }
+}
+
+/* Гарантируем, что скрытые элементы действительно скрыты */
+.input-section.hidden,
+.choices-section.hidden {
+    display: none !important;
+}
+
+/* Стили для сообщения о завершении чата */
+.completion-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 2.5rem;
+    color: #fff;
+    text-align: center;
+    animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Стили для модального окна */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+    display: none !important;
+}
+
+.modal-content {
+    background-color: #000;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    padding: 0;
+    font-family: 'Courier New', monospace;
+    animation: modalAppear 0.3s ease;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-header {
+    padding: 20px 20px 10px;
+    border-bottom: 1px solid #fff;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.modal-body {
+    padding: 20px;
+    color: #fff;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.modal-footer {
+    padding: 10px 20px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-button {
+    padding: 10px 25px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    background: #000;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 80px;
+}
+
+.modal-button:hover {
+    transform: translateY(-2px);
+}
+
+.modal-button.confirm {
+    background: #fff;
+    color: #000;
+}
+
+.modal-button.confirm:hover {
+    background: #e0e0e0;
+}
+
+.modal-button.cancel:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Гарантируем, что скрытые элементы действительно скрыты */
+.input-section.hidden,
+.choices-section.hidden,
+.modal.hidden {
+    display: none !important;
+}
+
+/* Стили для модального окна */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.modal-content {
+    background-color: #000;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    padding: 0;
+    font-family: 'Courier New', monospace;
+    animation: modalAppear 0.3s ease;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-header {
+    padding: 20px 20px 10px;
+    border-bottom: 1px solid #fff;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.modal-body {
+    padding: 20px;
+    color: #fff;
+}
+
+.modal-footer {
+    padding: 10px 20px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-button {
+    padding: 10px 25px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    background: #000;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 80px;
+}
+
+.modal-button:hover {
+    transform: translateY(-2px);
+}
+
+.modal-button.confirm {
+    background: #fff;
+    color: #000;
+}
+
+.modal-button.confirm:hover {
+    background: #e0e0e0;
+}
+
+.modal-button.cancel:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* стили для модального окна отзыва */
+#feedback-text {
+    width: 100%;
+    height: 150px;
+    padding: 15px;
+    background: #000;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    resize: vertical;
+    outline: none;
+}
+
+#feedback-text:focus {
+    border-color: #fff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.char-counter {
+    text-align: right;
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* элементы действительно скрыты */
+.input-section.hidden,
+.choices-section.hidden,
+.modal.hidden {
+    display: none !important;
+}
+
+/* Стили для плавных переходов */
+.content {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.container {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#message-modal .modal-content {
+    max-width: 400px;
+}
+
+#message-modal .modal-body {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+#message-modal-text {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+#message-modal-ok {
+    min-width: 100px;
+}

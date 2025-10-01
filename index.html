@@ -1,0 +1,180 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>?</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <div class="container">
+        <h1 id="typing-text" class="typing-text"></h1>
+    </div>
+    
+    <!-- Основное игровое меню -->
+    <div id="content" class="content hidden">
+        <div class="game-menu">
+            <div class="menu-item" data-action="start">Start Introduction</div>
+            <div class="menu-item" data-action="continue">Continue Communication</div>
+            <div class="menu-item" data-action="settings">Settings</div>
+            <div class="menu-item" data-action="feedback">Leave Feedback</div>
+            <div class="menu-item" data-action="exit">Exit</div>
+        </div>
+    </div>
+
+<!-- Модальное окно для сообщений (заменит alert) -->
+<div id="message-modal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="message-modal-title">Message</h3>
+        </div>
+        <div class="modal-body">
+            <p id="message-modal-text"></p>
+        </div>
+        <div class="modal-footer">
+            <button id="message-modal-ok" class="modal-button confirm">OK</button>
+        </div>
+    </div>
+</div>
+
+<!-- Экран настроек -->
+<div id="settings-screen" class="settings-screen hidden">
+    <div class="settings-menu">
+        <h2 class="settings-title">Settings</h2>
+        
+        <div class="setting-group">
+            <h3 class="setting-label">Language</h3>
+            <div class="language-options">
+                <div class="language-option" data-lang="en">
+                    <span class="flag-icon">
+                        <svg viewBox="0 0 60 30" width="30" height="20">
+                            <clipPath id="t">
+                                <path d="M30,15 h30 v15 z v15 h-30 z h-30 v-15 z v-15 h30 z"/>
+                            </clipPath>
+                            <path d="M0,0 v30 h60 v-30 z" fill="#012169"/>
+                            <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+                            <path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t)" stroke="#C8102E" stroke-width="4"/>
+                            <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+                            <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+                        </svg>
+                    </span>
+                    <span class="language-name">English</span>
+                </div>
+                <div class="language-option" data-lang="ru">
+                    <span class="flag-icon">
+                        <svg viewBox="0 0 60 30" width="30" height="20">
+                            <path d="M0,0 h60 v10 h-60 z" fill="#fff"/>
+                            <path d="M0,10 h60 v10 h-60 z" fill="#0039a6"/>
+                            <path d="M0,20 h60 v10 h-60 z" fill="#d52b1e"/>
+                        </svg>
+                    </span>
+                    <span class="language-name">Русский</span>
+                </div>
+                <div class="language-option" data-lang="es">
+                    <span class="flag-icon">
+                        <svg viewBox="0 0 60 30" width="30" height="20">
+                            <path d="M0,0 h60 v6 h-60 z" fill="#aa151b"/>
+                            <path d="M0,6 h60 v6 h-60 z" fill="#f1bf00"/>
+                            <path d="M0,12 h60 v6 h-60 z" fill="#aa151b"/>
+                            <path d="M0,18 h60 v6 h-60 z" fill="#f1bf00"/>
+                            <path d="M0,24 h60 v6 h-60 z" fill="#aa151b"/>
+                        </svg>
+                    </span>
+                    <span class="language-name">Español</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="setting-group">
+            <h3 class="setting-label">Volume</h3>
+            <div class="volume-control">
+                <div class="volume-slider-container">
+                    <div class="volume-percent" id="volume-percent">50%</div>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" class="volume-slider">
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-item back-button" data-action="back">Back to Menu</div>
+    </div>
+</div>
+
+    <!-- Экран знакомства -->
+    <div id="introduction-screen" class="introduction-screen hidden">
+        <div class="dialogue-container">
+            <div class="character-section">
+                <div class="character-image">
+                    <img src="assets/images/knife.png" alt="Kn1f3" id="character-img">
+                </div>
+                <div class="character-name">Kn1f3</div>
+            </div>
+            
+            <div class="dialogue-section">
+                <div class="dialogue-box" id="dialogue-box">
+                    <!-- Диалоги будут добавляться сюда -->
+                </div>
+                
+                <!-- Элементы ввода изначально скрыты -->
+                <div class="input-section hidden" id="input-section">
+                    <input type="text" id="name-input" placeholder="Введите ваше имя..." maxlength="20">
+                    <button id="submit-name">✓</button>
+                </div>
+                
+                <!-- Контейнер для вариантов ответа (изначально пустой) -->
+                <div class="choices-section hidden" id="choices-section">
+                    <!-- Варианты ответов будут добавляться динамически -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="back-to-menu">
+            <div class="menu-item" id="back-to-menu">Назад в меню</div>
+        </div>
+    </div>
+
+    <!-- Модальное окно подтверждения выхода -->
+    <div id="exit-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="exit-modal-title">Exit Confirmation</h3>
+            </div>
+            <div class="modal-body">
+                <p id="exit-modal-message">Are you sure you want to exit?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="exit-confirm" class="modal-button confirm">Yes</button>
+                <button id="exit-cancel" class="modal-button cancel">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для отзыва -->
+    <div id="feedback-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="feedback-modal-title">Leave Feedback</h3>
+            </div>
+            <div class="modal-body">
+                <textarea id="feedback-text" placeholder="Enter your feedback..." maxlength="500"></textarea>
+                <div class="char-counter">
+                    <span id="char-count">0</span>/500
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="feedback-submit" class="modal-button confirm">Submit</button>
+                <button id="feedback-cancel" class="modal-button cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/TypingEffect.js"></script>
+    <script src="js/TitleTypingEffect.js"></script>
+    <script src="js/AudioPlayer.js"></script>
+    <script src="js/UIManager.js"></script>
+    <script src="js/LanguageManager.js"></script>
+    <script src="js/GameMenu.js"></script>
+    <script src="js/DialogueManager.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
