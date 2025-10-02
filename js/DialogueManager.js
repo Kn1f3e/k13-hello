@@ -19,7 +19,6 @@ class DialogueManager {
     }
     
     init() {
-        // Инициализация событий
         this.elements.submitName.addEventListener('click', () => this.handleNameSubmit());
         this.elements.nameInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') this.handleNameSubmit();
@@ -32,11 +31,7 @@ class DialogueManager {
         });
         
         this.elements.backToMenu.addEventListener('click', () => this.backToMenu());
-        
-        // Гарантированно скрываем все элементы ввода при инициализации
         this.hideAllInputElements();
-        
-        // Обновляем placeholder поля ввода имени
         this.updateNamePlaceholder();
     }
     
@@ -49,17 +44,10 @@ class DialogueManager {
         this.currentStep = 0;
         this.elements.dialogueBox.innerHTML = '';
         this.hideAllInputElements();
-        
-        // Обновляем placeholder поля ввода имени
         this.updateNamePlaceholder();
-        
-        // Показываем экран знакомства
         this.elements.screen.classList.remove('hidden');
-        
-        // Начинаем диалог с приветствия
         this.showCharacterMessage(this.languageManager.getTranslation('hello'))
             .then(() => {
-                // ПОСЛЕ показа приветствия показываем поле ввода имени
                 setTimeout(() => {
                     this.showInputSection();
                 }, 1500);
@@ -71,8 +59,6 @@ class DialogueManager {
             const messageElement = this.createMessageElement(message, 'character');
             this.elements.dialogueBox.appendChild(messageElement);
             this.elements.dialogueBox.scrollTop = this.elements.dialogueBox.scrollHeight;
-            
-            // Ждем завершения анимации печати + дополнительное время для чтения
             setTimeout(() => {
                 resolve();
             }, message.length * 50 + 1500);
@@ -88,8 +74,7 @@ class DialogueManager {
     createMessageElement(text, type) {
         const element = document.createElement('div');
         element.className = `dialogue-message ${type}`;
-        
-        // Эффект печати
+
         const fullText = text;
         element.textContent = '';
         let currentIndex = 0;
@@ -108,15 +93,11 @@ class DialogueManager {
     }
     
     showCompletionMessage() {
-        // Очищаем диалоговое окно
         this.elements.dialogueBox.innerHTML = '';
         
-        // Создаем элемент для сообщения о завершении
         const completionElement = document.createElement('div');
         completionElement.className = 'completion-message';
         completionElement.textContent = this.languageManager.getTranslation('chatCompleted');
-        
-        // Добавляем в диалоговое окно
         this.elements.dialogueBox.appendChild(completionElement);
     }
     
@@ -130,7 +111,6 @@ class DialogueManager {
     }
     
     showFirstChoice() {
-        // Очищаем секцию выбора и показываем только первый вариант
         this.elements.choicesSection.innerHTML = '';
         
         const choice1 = document.createElement('div');
@@ -143,7 +123,6 @@ class DialogueManager {
     }
     
     showSecondChoice() {
-        // Очищаем секцию выбора и показываем только второй вариант
         this.elements.choicesSection.innerHTML = '';
         
         const choice2 = document.createElement('div');
@@ -170,13 +149,11 @@ class DialogueManager {
             this.userName = name;
             this.showUserMessage(name);
             this.hideInputSection();
-            
-            // Увеличена задержка перед показом приветственного сообщения
+    
             setTimeout(() => {
                 const welcomeMessage = this.languageManager.getTranslation('welcome', { name: name });
                 this.showCharacterMessage(welcomeMessage)
                     .then(() => {
-                        // Увеличена задержка перед показом первого варианта ответа
                         setTimeout(() => {
                             this.showFirstChoice();
                         }, 2000);
@@ -199,25 +176,17 @@ class DialogueManager {
                 characterResponse = this.languageManager.getTranslation('response2');
                 break;
         }
-        
-        // Скрываем варианты ответа перед показом ответа пользователя
         this.hideChoicesSection();
-        
-        // Показываем ответ пользователя
         this.showUserMessage(userResponse);
         
-        // Увеличена задержка перед показам ответа персонажа
         setTimeout(() => {
             this.showCharacterMessage(characterResponse)
                 .then(() => {
-                    // Если это был первый выбор, показываем второй вариант
                     if (choice === '1') {
-                        // Увеличена задержка перед показом второго варианта
                         setTimeout(() => {
                             this.showSecondChoice();
                         }, 2000);
                     } else {
-                        // Если это был второй выбор, показываем завершающее сообщение
                         setTimeout(() => {
                             this.showCompletionMessage();
                         }, 1500);
@@ -227,24 +196,17 @@ class DialogueManager {
     }
     
     backToMenu() {
-        // Скрываем экран знакомства
         this.elements.screen.classList.add('hidden');
         
-        // Получаем элементы главного меню
         const contentElement = document.getElementById('content');
         const container = document.querySelector('.container');
         
-        // Восстанавливаем видимость главного меню
         contentElement.classList.remove('hidden');
-        
-        // Сбрасываем стили для правильного отображения
         contentElement.style.opacity = '1';
         contentElement.style.transform = 'translateY(0)';
-        
-        // Скрываем начальный текст, если он был виден
+
         container.classList.add('hidden');
         
-        // Убеждаемся, что меню действительно видимо
         setTimeout(() => {
             contentElement.style.display = 'block';
         }, 50);
