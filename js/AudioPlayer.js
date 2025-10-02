@@ -1,4 +1,3 @@
-// js/AudioPlayer.js
 class AudioPlayer {
     constructor(trackPath, volume = 0.5) {
         this.audio = new Audio(trackPath);
