@@ -1,4 +1,3 @@
-// js/TypingEffect.js
 class TypingEffect {
     constructor(element, phrases, typingSpeed = 100, erasingSpeed = 50, pauseDuration = 1500) {
         this.element = element;
