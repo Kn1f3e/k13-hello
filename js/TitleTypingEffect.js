@@ -1,7 +1,5 @@
-// js/TitleTypingEffect.js
 class TitleTypingEffect {
     constructor(typingSpeed = 160, erasingSpeed = 30, pauseDuration = 1800) {
-        // Фиксированные фразы для заголовка вкладки
         this.phrases = [
             "Hi!",
             "Knife",
@@ -29,7 +27,6 @@ class TitleTypingEffect {
 
     stop() {
         this.isStopped = true;
-        // Восстанавливаем оригинальный заголовок при остановке
         document.title = this.originalTitle;
     }
 
@@ -44,7 +41,6 @@ class TitleTypingEffect {
             this.currentCharIndex++;
         }
 
-        // Обновляем заголовок вкладки (без мигающей палки)
         document.title = currentPhrase.substring(0, this.currentCharIndex);
 
         let typeSpeed = this.typingSpeed;
