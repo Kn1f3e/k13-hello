@@ -1,10 +1,8 @@
-// js/LanguageManager.js
 class LanguageManager {
     constructor() {
         this.currentLanguage = 'en'; // По умолчанию английский
         this.translations = {
             en: {
-                // Меню
                 start: 'Start Introduction',
                 continue: 'Continue Communication',
                 settings: 'Settings',
@@ -154,7 +152,6 @@ class LanguageManager {
     getTranslation(key, params = {}) {
         let translation = this.translations[this.currentLanguage][key] || key;
         
-        // параметры в строке перевода
         Object.keys(params).forEach(param => {
             translation = translation.replace(`{${param}}`, params[param]);
         });
@@ -205,7 +202,7 @@ class LanguageManager {
         // модальное окно отзыва
         this.updateFeedbackModal();
 
-        // Обновляем модальное окно сообщений
+        // модальное окно сообщений
         this.updateMessageModal();
     }
     
